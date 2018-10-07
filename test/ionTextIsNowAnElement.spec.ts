@@ -1,7 +1,5 @@
-import { expect } from 'chai';
 import { ruleName } from '../src/ionTextIsNowAnElementRule';
-import { assertAnnotated, assertMultipleAnnotated, assertSuccess, assertFailure } from './testHelper';
-import { Replacement, Utils } from 'tslint';
+import { assertAnnotated, assertMultipleAnnotated, assertSuccess } from './testHelper';
 
 describe(ruleName, () => {
   describe('success', () => {
@@ -90,44 +88,6 @@ describe(ruleName, () => {
           }
         ]
       });
-    });
-  });
-
-  describe('replacements', () => {
-    it('should create parent ion-text and remove attribute', () => {
-      let source = `
-        @Component({
-          template: \`<h1 ion-text></h1>
-          \`
-        })
-        class Bar {}
-      `;
-      const fail = {
-        message: 'ion-text is now an ion-text element instead of an Angular directive.',
-        startPosition: {
-          line: 2,
-          character: 25
-        },
-        endPosition: {
-          line: 2,
-          character: 33
-        }
-      };
-
-      const failures = assertFailure(ruleName, source, fail);
-      const fixes = failures.map(f => f.getFix());
-      const res = Replacement.applyAll(source, Utils.flatMap(fixes, Utils.arrayify));
-
-      let expected = `
-        @Component({
-          template: \`<ion-text>
-<h1></h1>
-</ion-text>
-          \`
-        })
-        class Bar {}
-      `;
-      expect(res).to.eq(expected);
     });
   });
 });
