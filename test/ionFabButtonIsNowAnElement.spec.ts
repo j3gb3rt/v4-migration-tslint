@@ -1,7 +1,5 @@
-import { expect } from 'chai';
 import { ruleName } from '../src/ionFabButtonIsNowAnElementRule';
-import { assertAnnotated, assertSuccess, assertFailure } from './testHelper';
-import { Replacement, Utils } from 'tslint';
+import { assertAnnotated, assertSuccess } from './testHelper';
 
 describe(ruleName, () => {
   describe('success', () => {
@@ -86,42 +84,6 @@ describe(ruleName, () => {
         message: 'ion-fab is now an ion-fab-button element instead of an Angular directive.',
         source
       });
-    });
-  });
-
-  describe('replacements', () => {
-    it('should replace button with ion-fab-button and remove attribute', () => {
-      let source = `
-        @Component({
-          template: \`<button ion-fab></button>
-          \`
-        })
-        class Bar {}
-      `;
-      const fail = {
-        message: 'ion-fab is now an ion-fab-button element instead of an Angular directive.',
-        startPosition: {
-          line: 2,
-          character: 29
-        },
-        endPosition: {
-          line: 2,
-          character: 36
-        }
-      };
-
-      const failures = assertFailure(ruleName, source, fail);
-      const fixes = failures.map(f => f.getFix());
-      const res = Replacement.applyAll(source, Utils.flatMap(fixes, Utils.arrayify));
-
-      let expected = `
-        @Component({
-          template: \`<ion-fab-button></ion-fab-button>
-          \`
-        })
-        class Bar {}
-      `;
-      expect(res).to.eq(expected);
     });
   });
 });
